@@ -343,25 +343,23 @@ const ContactCard = ({ cardData, index = 0, isActive = false, onClick, totalCard
     document.addEventListener('mouseup', handleMouseUp);
   };
 
-  // 3D Parallax tilt effect (Cash App style)
+  // 3D Parallax tilt effect (both vertical & horizontal)
   useEffect(() => {
     if (!cardRef.current) return;
 
+    const card = cardRef.current;
+
+    // Desktop: mouse-based parallax
     const handleMouseMove = (e) => {
       if (!cardRef.current) return;
-      
       const rect = cardRef.current.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
-      
       const x = e.clientX - centerX;
       const y = e.clientY - centerY;
-      
-      // Calculate tilt angles (max 15 degrees for active, 8 for inactive)
-      const maxTilt = isActive ? 15 : 8;
+      const maxTilt = isActive ? 18 : 10;
       const tiltX = (y / (rect.height / 2)) * maxTilt;
       const tiltY = (x / (rect.width / 2)) * -maxTilt;
-      
       setTilt({ x: tiltX, y: tiltY });
     };
 
@@ -369,13 +367,39 @@ const ContactCard = ({ cardData, index = 0, isActive = false, onClick, totalCard
       setTilt({ x: 0, y: 0 });
     };
 
-    const card = cardRef.current;
     card.addEventListener('mousemove', handleMouseMove);
     card.addEventListener('mouseleave', handleMouseLeave);
+
+    // Mobile: device orientation–based parallax
+    const isTouchDevice =
+      typeof window !== 'undefined' &&
+      ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+
+    const handleOrientation = (event) => {
+      if (!isTouchDevice || !cardRef.current) return;
+      const { beta, gamma } = event; // beta: front/back tilt, gamma: left/right
+      if (beta == null || gamma == null) return;
+
+      const maxTilt = isActive ? 18 : 10;
+      const normalizedX = Math.max(-30, Math.min(30, beta));  // up/down
+      const normalizedY = Math.max(-30, Math.min(30, gamma)); // left/right
+
+      const tiltX = (normalizedX / 30) * maxTilt;
+      const tiltY = -(normalizedY / 30) * maxTilt;
+
+      setTilt({ x: tiltX, y: tiltY });
+    };
+
+    if (isTouchDevice && typeof window !== 'undefined') {
+      window.addEventListener('deviceorientation', handleOrientation);
+    }
 
     return () => {
       card.removeEventListener('mousemove', handleMouseMove);
       card.removeEventListener('mouseleave', handleMouseLeave);
+      if (isTouchDevice && typeof window !== 'undefined') {
+        window.removeEventListener('deviceorientation', handleOrientation);
+      }
     };
   }, [isActive]);
 
@@ -443,6 +467,10 @@ const ContactCard = ({ cardData, index = 0, isActive = false, onClick, totalCard
   
   // Apply 3D tilt effect - more subtle for inactive cards
   const tiltIntensity = isActive ? 1 : 0.5;
+  const depth = isActive ? 40 : 25;
+  // Parallax translation based on tilt in both axes
+  const parallaxTranslateX = tilt.y * -0.4;
+  const parallaxTranslateY = tilt.x * 0.4;
   const tiltTransform = !isFlipped 
     ? `rotateX(${tilt.x * tiltIntensity}deg) rotateY(${tilt.y * tiltIntensity}deg)` 
     : '';
@@ -459,7 +487,7 @@ const ContactCard = ({ cardData, index = 0, isActive = false, onClick, totalCard
       style={{ 
         touchAction: 'pan-y', 
         userSelect: 'none',
-        transform: `translateY(${translateY}px) scale(${scale}) ${tiltTransform}`,
+        transform: `translate3d(${parallaxTranslateX}px, ${translateY + parallaxTranslateY}px, ${depth}px) scale(${scale}) ${tiltTransform}`,
         zIndex: zIndex,
         opacity: Math.max(0.6, opacity),
         pointerEvents: 'auto'

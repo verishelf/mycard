@@ -49,9 +49,26 @@
   }
 }
 
+/* Soft animated shine across the card surface */
+@keyframes cardShine {
+  0% {
+    opacity: 0.15;
+    transform: translateX(-40%) translateY(-20%);
+  }
+  50% {
+    opacity: 0.35;
+    transform: translateX(10%) translateY(0%);
+  }
+  100% {
+    opacity: 0.15;
+    transform: translateX(40%) translateY(-20%);
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  /* Keep Geist as main body font; Orbitron is applied only to headings */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -63,7 +80,7 @@
 }
 
 html, body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background: #0a0a0a;
   color: #f0f0f0;
   /* Allow vertical scrolling so tall content/cards are never cut off */
@@ -297,10 +314,6 @@ body::-webkit-scrollbar {
     overflow: visible !important;
   }
   
-  .contact-card[style*="transform"] {
-    transform: none !important;
-  }
-  
   .contact-card * {
     transform-style: preserve-3d;
   }
@@ -504,9 +517,10 @@ body::-webkit-scrollbar {
   border-radius: 20px 20px 0 0;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.7;
+  opacity: 0.25;
   transition: opacity 0.3s ease;
-  display: none;
+  pointer-events: none;
+  animation: cardShine 6s ease-in-out infinite;
 }
 
 .contact-card:hover::before {
@@ -528,10 +542,10 @@ body::-webkit-scrollbar {
   );
   border-radius: 23px;
   z-index: -1;
-  opacity: 0.5;
+  opacity: 0.45;
   filter: blur(10px);
   transition: opacity 0.3s ease, filter 0.3s ease;
-  display: none;
+  pointer-events: none;
 }
 
 .contact-card:hover::after {
@@ -700,12 +714,13 @@ body::-webkit-scrollbar {
   font-size: 1.6rem;
   font-weight: 700;
   margin-bottom: 15px;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.08em;
   text-align: center;
   line-height: 1.3;
   position: relative;
   z-index: 2;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  font-family: var(--font-orbitron), var(--font-geist-sans), system-ui, sans-serif;
 }
 
 .card-icon {
@@ -973,6 +988,8 @@ body::-webkit-scrollbar {
   font-weight: 700;
   margin-bottom: 4px;
   line-height: 1.2;
+  font-family: var(--font-orbitron), var(--font-geist-sans), system-ui, sans-serif;
+  letter-spacing: 0.04em;
 }
 
 .name-title p {
