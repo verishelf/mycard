@@ -530,6 +530,15 @@ const ContactCard = ({ cardData, index = 0, isActive = false, onClick, totalCard
               title={link.title}
               target={link.external ? '_blank' : undefined}
               rel={link.external ? 'noopener noreferrer' : undefined}
+              download={link.url?.toLowerCase().endsWith('.vcf') ? 'Frank-Posada-IV.vcf' : undefined}
+              onClick={(e) => {
+                // Make sure card swipe/flip handlers never require a second tap
+                e.stopPropagation();
+              }}
+              onTouchStart={(e) => {
+                // Prevent the parent touch handlers from "eating" the first tap on mobile
+                e.stopPropagation();
+              }}
             >
               {getSocialIcon(link.platform)}
             </a>

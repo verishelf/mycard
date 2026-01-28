@@ -63,7 +63,7 @@ const allCardData = [
         title: 'Email & Location',
         content: '<p>Contact me via email</p><p class="mt-3">Based in San Diego, CA</p><p class="text-sm opacity-80 mt-3">Available for remote work</p>',
         socialLinks: [
-          { platform: 'email', url: 'mailto:frank@example.com', title: 'Email' },
+          { platform: 'email', url: '/frank-posada-contact.vcf', title: 'Download Contact Card', external: false },
           { platform: 'github', url: 'https://github.com', title: 'GitHub', external: true },
           { platform: 'calendar', url: 'https://calendly.com', title: 'Schedule', external: true },
         ],
@@ -97,44 +97,11 @@ export default function Home() {
   const hideNotification = () => {
     setNotification({ show: false, message: '' });
   };
-
   // Get the active card based on tab
   const getActiveCard = () => {
     const tabIndexMap = { phone: 0, social: 1, email: 2 };
     return allCardData[tabIndexMap[activeTab]] || allCardData[0];
   };
-
-  // Copy to clipboard functionality
-  useEffect(() => {
-    const handleCopy = async (e) => {
-      const target = e.target;
-      const socialIcon = target.closest('.social-icon');
-      
-      if (socialIcon) {
-        const href = socialIcon.getAttribute('href');
-        if (href?.startsWith('tel:')) {
-          const phoneNumber = href.replace('tel:', '');
-          try {
-            await navigator.clipboard.writeText(phoneNumber);
-            showNotification(`Copied to clipboard: ${phoneNumber}`);
-          } catch (err) {
-            console.error('Failed to copy:', err);
-          }
-        } else if (href?.startsWith('mailto:')) {
-          const email = href.replace('mailto:', '');
-          try {
-            await navigator.clipboard.writeText(email);
-            showNotification(`Copied to clipboard: ${email}`);
-          } catch (err) {
-            console.error('Failed to copy:', err);
-          }
-        }
-      }
-    };
-
-    document.addEventListener('click', handleCopy);
-    return () => document.removeEventListener('click', handleCopy);
-  }, []);
 
   const activeCard = getActiveCard();
 
