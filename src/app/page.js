@@ -1,65 +1,192 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useEffect, useRef } from 'react';
+import ContactCard from '@/components/ContactCard';
+import Notification from '@/components/Notification';
+import { FaPhoneAlt, FaHashtag, FaEnvelope, FaSyncAlt, FaArrowLeft } from 'react-icons/fa';
+
+const allCardData = [
+  {
+    id: 'card1',
+    className: 'card-1',
+    name: 'Frank Posada IV',
+    subtitle: 'Phone & Contact',
+    profileImage: '/paco.jpg',
+    slides: [
+      {
+        icon: 'fa-phone-alt',
+        title: 'Phone & WhatsApp',
+        content: '<p>(619) 901-7344</p><p class="mt-3 text-sm opacity-80">Available Mon-Fri, 9AM-6PM PST</p>',
+        socialLinks: [
+          { platform: 'phone', url: 'tel:+16199017344', title: 'Call' },
+          { platform: 'whatsapp', url: 'https://wa.me/16199017344', title: 'WhatsApp', external: true },
+          { platform: 'sms', url: 'sms:+16199017344', title: 'Text' },
+        ],
+      },
+    ],
+    backIcon: 'fa-mobile-alt',
+    backTitle: 'Contact Information',
+    backContent: '<p class="mb-3"><strong>Phone:</strong> (619) 901-7344</p><p class="mb-3"><strong>Text:</strong> (619) 901-7344</p><p class="text-sm opacity-80 mt-4">For urgent matters, please call directly</p>',
+  },
+  {
+    id: 'card2',
+    className: 'card-2',
+    name: 'Frank Posada IV',
+    subtitle: 'Social Media',
+    profileImage: '/paco.jpg',
+    slides: [
+      {
+        icon: 'fa-hashtag',
+        title: 'Social Media',
+        content: '<p>Connect with me on social platforms</p><p class="mt-2">Follow for updates and insights</p>',
+        socialLinks: [
+          { platform: 'facebook', url: 'https://facebook.com', title: 'Facebook', external: true },
+          { platform: 'instagram', url: 'https://instagram.com', title: 'Instagram', external: true },
+          { platform: 'twitter', url: 'https://twitter.com', title: 'Twitter', external: true },
+          { platform: 'linkedin', url: 'https://linkedin.com', title: 'LinkedIn', external: true },
+        ],
+      },
+    ],
+    backIcon: 'fa-user-friends',
+    backTitle: 'Social Details',
+    backContent: '<p class="mb-2"><strong>Connect on social media</strong></p><p class="mt-4 text-sm opacity-80">Stay updated with my latest work</p>',
+  },
+  {
+    id: 'card3',
+    className: 'card-3',
+    name: 'Frank Posada IV',
+    subtitle: 'Email & Location',
+    profileImage: '/paco.jpg',
+    slides: [
+      {
+        icon: 'fa-envelope',
+        title: 'Email & Location',
+        content: '<p>Contact me via email</p><p class="mt-3">Based in San Diego, CA</p><p class="text-sm opacity-80 mt-3">Available for remote work</p>',
+        socialLinks: [
+          { platform: 'email', url: 'mailto:frank@example.com', title: 'Email' },
+          { platform: 'github', url: 'https://github.com', title: 'GitHub', external: true },
+          { platform: 'calendar', url: 'https://calendly.com', title: 'Schedule', external: true },
+        ],
+      },
+    ],
+    backIcon: 'fa-map-marker-alt',
+    backTitle: 'Location & Other',
+    backContent: '<p class="mb-2"><strong>Location:</strong> San Diego, CA</p><p class="mb-2"><strong>Phone:</strong> (619) 901-7344</p><p class="mt-4 text-sm opacity-80">Let\'s connect!</p>',
+  },
+];
+
+const tabs = [
+  { id: 'phone', label: 'Phone', icon: FaPhoneAlt },
+  { id: 'social', label: 'Social', icon: FaHashtag },
+  { id: 'email', label: 'Email', icon: FaEnvelope },
+];
 
 export default function Home() {
+  const [notification, setNotification] = useState({ show: false, message: '' });
+  const [activeTab, setActiveTab] = useState('phone');
+  const containerRef = useRef(null);
+  const flipButtonRef = useRef(null);
+  const [isCardFlipped, setIsCardFlipped] = useState(false);
+
+  const showNotification = (message) => {
+    setNotification({ show: true, message });
+  };
+
+  const hideNotification = () => {
+    setNotification({ show: false, message: '' });
+  };
+
+  // Get the active card based on tab
+  const getActiveCard = () => {
+    const tabIndexMap = { phone: 0, social: 1, email: 2 };
+    return allCardData[tabIndexMap[activeTab]] || allCardData[0];
+  };
+
+  // Copy to clipboard functionality
+  useEffect(() => {
+    const handleCopy = async (e) => {
+      const target = e.target;
+      const socialIcon = target.closest('.social-icon');
+      
+      if (socialIcon) {
+        const href = socialIcon.getAttribute('href');
+        if (href?.startsWith('tel:')) {
+          const phoneNumber = href.replace('tel:', '');
+          try {
+            await navigator.clipboard.writeText(phoneNumber);
+            showNotification(`Copied to clipboard: ${phoneNumber}`);
+          } catch (err) {
+            console.error('Failed to copy:', err);
+          }
+        } else if (href?.startsWith('mailto:')) {
+          const email = href.replace('mailto:', '');
+          try {
+            await navigator.clipboard.writeText(email);
+            showNotification(`Copied to clipboard: ${email}`);
+          } catch (err) {
+            console.error('Failed to copy:', err);
+          }
+        }
+      }
+    };
+
+    document.addEventListener('click', handleCopy);
+    return () => document.removeEventListener('click', handleCopy);
+  }, []);
+
+  const activeCard = getActiveCard();
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <>
+      <div className="parallax-bg" />
+      <div className="card-container" ref={containerRef}>
+        <div className="tabs-container">
+          {tabs.map((tab) => {
+            const IconComponent = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
+                onClick={() => setActiveTab(tab.id)}
+              >
+                <IconComponent />
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        <div key={activeTab} className="card-wrapper">
+          <ContactCard 
+            cardData={activeCard} 
+            index={0}
+            isActive={true}
+            totalCards={1}
+            activeCardIndex={0}
+            onFlipRef={flipButtonRef}
+            onFlipStateChange={setIsCardFlipped}
+          />
+          <button 
+            className="flip-button-external" 
+            onClick={() => {
+              if (flipButtonRef.current) {
+                flipButtonRef.current();
+              }
+            }} 
+            aria-label={isCardFlipped ? "Flip back" : "Flip card"}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            {isCardFlipped ? (
+              <FaArrowLeft className="flip-icon" />
+            ) : (
+              <FaSyncAlt className="flip-icon" />
+            )}
+          </button>
         </div>
-      </main>
-    </div>
+      </div>
+      <Notification
+        message={notification.message}
+        show={notification.show}
+        onClose={hideNotification}
+      />
+    </>
   );
 }
