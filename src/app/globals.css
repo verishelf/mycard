@@ -24,6 +24,31 @@
   }
 }
 
+/* Ripple/pulse effect for profile image halo */
+@keyframes profileRipple {
+  0% {
+    box-shadow:
+      0 8px 20px rgba(0, 0, 0, 0.4),
+      0 0 0 2px rgba(255, 255, 255, 0.1),
+      0 2px 4px rgba(0, 0, 0, 0.3) inset,
+      0 0 0 40px rgba(0, 0, 0, 0.10);
+  }
+  50% {
+    box-shadow:
+      0 12px 26px rgba(0, 0, 0, 0.6),
+      0 0 0 3px rgba(255, 255, 255, 0.16),
+      0 3px 7px rgba(0, 0, 0, 0.45) inset,
+      0 0 0 55px rgba(0, 0, 0, 0.18);
+  }
+  100% {
+    box-shadow:
+      0 8px 20px rgba(0, 0, 0, 0.4),
+      0 0 0 2px rgba(255, 255, 255, 0.1),
+      0 2px 4px rgba(0, 0, 0, 0.3) inset,
+      0 0 0 40px rgba(0, 0, 0, 0.10);
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -41,10 +66,12 @@ html, body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: #0a0a0a;
   color: #f0f0f0;
-  overflow: hidden;
+  /* Allow vertical scrolling so tall content/cards are never cut off */
+  overflow-x: hidden;
+  overflow-y: auto;
   height: 100%;
   width: 100%;
-  position: fixed;
+  position: relative;
   margin: 0;
   padding: 0;
   -webkit-overflow-scrolling: touch;
@@ -94,8 +121,9 @@ body::-webkit-scrollbar {
 .card-container {
   perspective: 2000px;
   perspective-origin: center center;
-  height: 100vh;
-  height: -webkit-fill-available;
+  /* Use min-height instead of fixed viewport height so iOS Safari UI chrome
+     doesn’t cause the card to be clipped. */
+  min-height: 100vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
@@ -105,9 +133,9 @@ body::-webkit-scrollbar {
   gap: 20px;
   max-width: 100%;
   margin: 0;
-  overflow: hidden;
+  overflow: visible;
   transform-style: preserve-3d;
-  position: fixed;
+  position: relative;
   top: 0;
   left: 0;
   -webkit-overflow-scrolling: touch;
@@ -126,7 +154,7 @@ body::-webkit-scrollbar {
   display: flex !important;
   gap: 8px;
   position: fixed !important;
-  top: 20px;
+  top: 16px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 99999 !important;
@@ -145,7 +173,7 @@ body::-webkit-scrollbar {
 
 @media (max-width: 768px) {
   .tabs-container {
-    top: 10px !important;
+    top: 8px !important;
     padding: 8px !important;
     gap: 6px !important;
     z-index: 99999 !important;
@@ -176,8 +204,8 @@ body::-webkit-scrollbar {
   .card-container {
     justify-content: flex-start !important;
     align-items: center !important;
-    padding-top: 110px !important;
-    padding-bottom: 120px !important;
+    padding-top: 80px !important;
+    padding-bottom: 100px !important;
     gap: 0;
     overflow-y: auto !important;
     overflow-x: hidden !important;
@@ -200,7 +228,7 @@ body::-webkit-scrollbar {
     justify-content: flex-start;
     align-items: center;
     margin: 0 auto;
-    margin-top: 15px !important;
+    margin-top: 5px !important;
     margin-bottom: 15px !important;
     position: relative;
     gap: 12px;
@@ -215,7 +243,7 @@ body::-webkit-scrollbar {
     min-height: 480px;
     max-height: none !important;
     margin: 0 auto !important;
-    margin-top: 45px !important;
+    margin-top: 30px !important;
     left: auto !important;
     top: auto !important;
     right: auto !important;
@@ -262,21 +290,22 @@ body::-webkit-scrollbar {
   }
 }
 
-/* Safari specific scrollbar fixes */
+/* Safari specific tweaks – keep scrolling enabled so cards aren’t cut off */
 @supports (-webkit-touch-callout: none) {
   html, body {
-    position: fixed;
-    overflow: hidden;
-    -webkit-overflow-scrolling: none;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   
   .card-container {
-    -webkit-overflow-scrolling: none;
+    -webkit-overflow-scrolling: touch;
   }
   
   .card-front,
   .card-back {
-    -webkit-overflow-scrolling: none;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
@@ -805,6 +834,8 @@ body::-webkit-scrollbar {
     0 0 0 50px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   filter: brightness(0.95);
+  /* Continuous soft ripple / pulse */
+  animation: profileRipple 3s ease-in-out infinite;
 }
 
 .contact-card:hover .profile-img {
