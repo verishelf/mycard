@@ -16,7 +16,7 @@ const allCardData = [
       {
         icon: 'fa-phone-alt',
         title: 'Phone & WhatsApp',
-        content: '<p>(619) 901-7344</p><p class="mt-3 text-sm opacity-80">Available Mon-Fri, 9AM-6PM PST</p>',
+        content: '<p>(619) 901-7344</p><p class="mt-3 text-sm opacity-80">Available Mon-Fri, 9AM-6PM PST</p><p class="mt-4"><a href="/frank-posada-contact.vcf" class="save-contact-link">Save Contact to Phone</a></p>',
         socialLinks: [
           { platform: 'phone', url: 'tel:+16199017344', title: 'Call' },
           { platform: 'whatsapp', url: 'https://wa.me/16199017344', title: 'WhatsApp', external: true },
@@ -26,7 +26,7 @@ const allCardData = [
     ],
     backIcon: 'fa-mobile-alt',
     backTitle: 'Contact Information',
-    backContent: '<p class="mb-3"><strong>Phone:</strong> (619) 901-7344</p><p class="mb-3"><strong>Text:</strong> (619) 901-7344</p><p class="text-sm opacity-80 mt-4">For urgent matters, please call directly</p>',
+    backContent: '<p class="mb-3"><strong>Phone:</strong> (619) 901-7344</p><p class="mb-3"><strong>Text:</strong> (619) 901-7344</p><p class="mt-4"><a href="/frank-posada-contact.vcf" class="save-contact-link">Save Contact to Phone</a></p><p class="text-sm opacity-80 mt-4">For urgent matters, please call directly</p>',
   },
   {
     id: 'card2',
