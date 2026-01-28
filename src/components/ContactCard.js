@@ -508,10 +508,6 @@ const ContactCard = ({ cardData, index = 0, isActive = false, onClick, totalCard
           ))}
         </div>
 
-        <button className="flip-button" onClick={handleFlip} aria-label="Flip card">
-          <FaSyncAlt />
-        </button>
-
         {cardData.slides.length > 1 && (
           <div className="slide-indicator">
             {cardData.slides.map((_, index) => (
@@ -545,10 +541,6 @@ const ContactCard = ({ cardData, index = 0, isActive = false, onClick, totalCard
           className="contact-info"
           dangerouslySetInnerHTML={{ __html: cardData.backContent }}
         />
-
-        <button className="flip-button" onClick={handleFlip} aria-label="Flip back">
-          <FaArrowLeft />
-        </button>
       </div>
     </div>
   );

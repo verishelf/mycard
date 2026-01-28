@@ -85,6 +85,8 @@ export default function Home() {
   const [notification, setNotification] = useState({ show: false, message: '' });
   const [activeTab, setActiveTab] = useState('phone');
   const containerRef = useRef(null);
+  const tabsContainerRef = useRef(null);
+  const tabRefs = useRef({});
   const flipButtonRef = useRef(null);
   const [isCardFlipped, setIsCardFlipped] = useState(false);
 
@@ -136,16 +138,50 @@ export default function Home() {
 
   const activeCard = getActiveCard();
 
+  // Sliding glass indicator under active tab
+  const [indicatorStyle, setIndicatorStyle] = useState({ width: 0, left: 0, opacity: 0 });
+
+  useEffect(() => {
+    const updateIndicator = () => {
+      const container = tabsContainerRef.current;
+      const activeEl = tabRefs.current[activeTab];
+      if (!container || !activeEl) return;
+
+      const containerRect = container.getBoundingClientRect();
+      const activeRect = activeEl.getBoundingClientRect();
+
+      const left = activeRect.left - containerRect.left;
+      const width = activeRect.width;
+
+      setIndicatorStyle({
+        width,
+        left,
+        opacity: 1,
+      });
+    };
+
+    updateIndicator();
+    window.addEventListener('resize', updateIndicator);
+    return () => window.removeEventListener('resize', updateIndicator);
+  }, [activeTab]);
+
   return (
     <>
       <div className="parallax-bg" />
       <div className="card-container" ref={containerRef}>
-        <div className="tabs-container">
+        <div className="tabs-container" ref={tabsContainerRef}>
+          <div
+            className="tabs-indicator"
+            style={indicatorStyle}
+          />
           {tabs.map((tab) => {
             const IconComponent = tab.icon;
             return (
               <button
                 key={tab.id}
+                ref={(el) => {
+                  if (el) tabRefs.current[tab.id] = el;
+                }}
                 className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
                 onClick={() => setActiveTab(tab.id)}
               >
