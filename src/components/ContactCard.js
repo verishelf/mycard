@@ -540,6 +540,11 @@ const ContactCard = ({ cardData, index = 0, isActive = false, onClick, totalCard
               onClick={(e) => {
                 // Make sure card swipe/flip handlers never require a second tap
                 e.stopPropagation();
+                // For non-external actions (tel, sms, etc.), navigate directly
+                if (!link.external && typeof window !== 'undefined') {
+                  e.preventDefault();
+                  window.location.href = link.url;
+                }
               }}
               onTouchStart={(e) => {
                 // Prevent the parent touch handlers from "eating" the first tap on mobile
