@@ -42,10 +42,9 @@ const allCardData = [
         title: 'Social Media',
         content: '<p>Connect with me on social platforms</p><p class="mt-2">Follow for updates and insights</p>',
         socialLinks: [
-          { platform: 'facebook', url: 'https://facebook.com', title: 'Facebook', external: true },
-          { platform: 'instagram', url: 'https://instagram.com', title: 'Instagram', external: true },
-          { platform: 'twitter', url: 'https://twitter.com', title: 'Twitter', external: true },
-          { platform: 'linkedin', url: 'https://linkedin.com', title: 'LinkedIn', external: true },
+          { platform: 'facebook', url: 'https://www.facebook.com/profile.php?id=100086683267097', title: 'Facebook', external: true },
+          { platform: 'instagram', url: 'https://www.instagram.com/mrposada_/', title: 'Instagram', external: true },
+          { platform: 'linkedin', url: 'https://www.linkedin.com/in/frank-posada-iv-436a653a5/', title: 'LinkedIn', external: true },
         ],
       },
     ],
