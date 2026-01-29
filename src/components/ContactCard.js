@@ -23,6 +23,8 @@ import {
   FaWhatsapp,
   FaGithub,
   FaCalendarAlt,
+  FaDollarSign,
+  FaCreditCard,
 } from 'react-icons/fa';
 
 import { SiCashapp, SiVenmo } from 'react-icons/si';
@@ -445,24 +447,23 @@ const ContactCard = ({ cardData, index = 0, isActive = false, onClick, totalCard
   };
 
   const getSocialIcon = (platform) => {
-  const iconMap = {
-    facebook: FaFacebookF,
-    instagram: FaInstagram,
-    twitter: FaTwitter,
-    linkedin: FaLinkedinIn,
-    whatsapp: FaWhatsapp,
-    github: FaGithub,
-    calendar: FaCalendarAlt,
-    phone: FaPhone,
-    sms: FaSms,
-    email: FaEnvelope,
-    cashapp: SiCashapp,
-    venmo: SiVenmo,
+    const iconMap = {
+      facebook: FaFacebookF,
+      instagram: FaInstagram,
+      twitter: FaTwitter,
+      linkedin: FaLinkedinIn,
+      whatsapp: FaWhatsapp,
+      github: FaGithub,
+      calendar: FaCalendarAlt,
+      phone: FaPhone,
+      sms: FaSms,
+      email: FaEnvelope,
+      cashapp: FaDollarSign,
+      venmo: FaCreditCard,
+    };
+    const IconComponent = iconMap[platform] || FaPhone;
+    return <IconComponent />;
   };
-
-  const IconComponent = iconMap[platform] || FaPhone;
-  return <IconComponent />;
-};
 
   // Since we only have one card, simplify the calculations
   const translateY = 0;

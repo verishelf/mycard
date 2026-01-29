@@ -16,11 +16,13 @@ const allCardData = [
       {
         icon: 'fa-phone-alt',
         title: 'Phone & WhatsApp',
-        content: '<p>(619) 901-7344</p><p class="mt-3 text-sm opacity-80">Available Mon-Fri, 9AM-6PM PST</p><p class="mt-4"><a href="/frank-posada-contact.vcf" class="save-contact-link" download="Frank-Posada-IV.vcf">Save Contact to Phone</a></p>',
+        content: '<p>(619) 901-7344</p><p class="mt-4"><a href="/frank-posada-contact.vcf" class="save-contact-link" download="Frank-Posada-IV.vcf">Save Contact to Phone</a></p><p class="mt-3 text-xs opacity-70">Cash App: $posadafamily<br/>Venmo: @mrposada</p>',
         socialLinks: [
           { platform: 'phone', url: 'tel:+16199017344', title: 'Call' },
           { platform: 'whatsapp', url: 'https://wa.me/16199017344', title: 'WhatsApp', external: true },
           { platform: 'sms', url: 'sms:+16199017344', title: 'Text' },
+          { platform: 'cashapp', url: 'https://cash.app/$posadafamily', title: 'Cash App', external: true },
+          { platform: 'venmo', url: 'https://venmo.com/u/mrposada', title: 'Venmo', external: true },
         ],
       },
     ],
