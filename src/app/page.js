@@ -65,7 +65,7 @@ const allCardData = [
         content: '<p>Contact me via email</p><p class="mt-3">Based in San Diego, CA</p><p class="text-sm opacity-80 mt-3">Available for remote work</p>',
         socialLinks: [
           { platform: 'email', url: '/frank-posada-contact.vcf', title: 'Download Contact Card', external: false },
-          { platform: 'github', url: 'https://github.com', title: 'GitHub', external: true },
+          { platform: 'github', url: 'https://github.com/verishelf', title: 'GitHub', external: true },
           { platform: 'calendar', url: 'https://calendly.com', title: 'Schedule', external: true },
         ],
       },
